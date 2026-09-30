@@ -1,0 +1,24 @@
+info:
+  name: BODY_02_PUT_JSON
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: https://postman-echo.com/put
+  body:
+    type: json
+    data: |-
+      {
+       "id": 42,
+       "titulo": "Dune",
+       "disponible": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

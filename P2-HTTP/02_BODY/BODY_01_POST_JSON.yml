@@ -1,0 +1,24 @@
+info:
+  name: BODY_01_POST_JSON
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://postman-echo.com/post
+  body:
+    type: json
+    data: |-
+      {
+        "titulo": "Dune",
+        "autor": "Frank Herbert",
+        "disponible": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

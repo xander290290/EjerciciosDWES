@@ -1,0 +1,22 @@
+info:
+  name: BODY_03_PATCH_JSON
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: https://postman-echo.com/patch
+  body:
+    type: json
+    data: |-
+      {
+       "disponible": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

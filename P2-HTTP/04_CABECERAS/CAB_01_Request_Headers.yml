@@ -1,0 +1,23 @@
+info:
+  name: CAB_01_Request_Headers
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: https://postman-echo.com/headers
+  headers:
+    - name: Accept
+      value: application/json
+    - name: X-Curso
+      value: DAW
+    - name: x-Unidad
+      value: UT1
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

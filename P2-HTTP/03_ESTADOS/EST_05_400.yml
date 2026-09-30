@@ -1,0 +1,16 @@
+info:
+  name: EST_05_400
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: https://postman-echo.com/status/400
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
