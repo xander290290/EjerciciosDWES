@@ -5,6 +5,11 @@ declare(strict_types=1);
 require_once __DIR__ . '/../src/datos.php';
 require_once __DIR__ . '/../src/funciones.php';
 
+// Obtener videojuego primero
+
+$id = (int) ($_GET['id'] ?? 0);
+$videojuego = buscarPorId($videojuegos, $id);
+
 if ($videojuego === null) {
     // Completa el tratamiento del caso en el que el videojuego no existe.
     ?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 function normalizarTexto(string $texto): string
 {
+    // Juntar mejor en una
     $res = strtolower(trim($texto));
     return $res; // Mira ver socio
 }
@@ -14,11 +15,13 @@ function buscarPorId(array $videojuegos, int $id): ?array
 
     // No sé bien qué pasa?¿
     foreach ($videojuegos as $videojuego) {
+        // Normalizar para comparar y una vez lo encuentres, lo puedes devolver directamente, ¿no?
         if ($videojuego['id'] === $id) {
             $res[0] = $videojuego;
         }
     }
 
+    // Si no lo encuentras también devuelves algo?
     return $res[0] ?? null;
 }
 
@@ -29,7 +32,8 @@ function filtrarPorGenero(array $videojuegos, string $genero): array
 
     foreach ($videojuegos as $videojuego) {
         // COMPLETAR
-        if ($videojuego['genero'] = $genero) {
+        // Normalizar para comparar
+        if ($videojuego['genero'] === $genero) {
             $res[] = $videojuego;
         }
     }
@@ -44,7 +48,8 @@ function filtrarPorPlataforma(array $videojuegos, string $plataforma): array
 
     foreach ($videojuegos as $videojuego) {
         // COMPLETAR
-        if ($videojuego['plataforma'] = $plataforma) {
+        // Normalizar para comparar
+        if ($videojuego['plataforma'] === $plataforma) {
             $res[] = $videojuego;
         }
     }
@@ -63,14 +68,17 @@ function buscarPorTexto(array $videojuegos, string $texto): array
 
     foreach ($videojuegos as $videojuego) {
         $titulo = normalizarTexto($videojuego['titulo']);
-        $estudio = normalizarTexto($videojuego['estuio']);
+        // Había un error en la clave
+        $estudio = normalizarTexto($videojuego['estudio']);
 
         // Esta función está implementada, pero su lógica no produce todos los resultados esperados.
-        if (str_contains($titulo, $texto) && str_contains($estudio, $texto)) {
+        // Debe ser un or
+        if (str_contains($titulo, $texto) || str_contains($estudio, $texto)) {
             $resultado[] = $videojuego;
         }
     }
 
+    // Solo el primero?
     return $resultado[0];
 }
 
@@ -82,8 +90,10 @@ function ordenarVideojuegos(array $videojuegos, string $criterio): array
     for ($i = 0; $i < $cantidad - 1; $i++) {
         for ($j = $i+1; $j < $cantidad; $j++) {
 
-            if ($criterio = 'titulo') {
-                    if (strcmp($videojuegos[$i], $videojuegos[$j])) {
+            // Asignación?
+            if ($criterio === 'titulo') {
+                //Cuidado con mezclar i y j. También, puedes usar directamente >. Falta acceder al criterio
+                    if (strcmp($videojuegos[$i]['titulo'], $videojuegos[$j]['titulo'])) {
                         $temp = $videojuegos[$i];
                         $videojuegos[$i] = $videojuegos[$j];
                         $videojuegos[$j] = $temp;
