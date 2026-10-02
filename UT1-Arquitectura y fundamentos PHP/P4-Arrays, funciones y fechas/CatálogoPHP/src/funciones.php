@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+function diferenciaFechaAlta (array $libro) {
+    $fechaAlta = new DateTimeImmutable($libro['fechaAlta']);
+    $hoy = new DateTimeImmutable();
+
+    $diferencia = $fechaAlta->diff($hoy);
+
+    return "La diferencia desde la fecha de alta es de: " . $diferencia->d . " dias";
+}
+
 function buscarPorId(array $libros, int $id): ?array
 {
     foreach ($libros as $libro) {
@@ -69,4 +78,6 @@ function catalogo (array $libro) {
     echo "Páginas: " . $libro['paginas'] . "<br>";
     echo "Disponible: " . ($libro['disponible'] ? 'Sí' : 'No') . "<br>";
     echo "Fecha de Alta: " . $libro['fechaAlta'] . "<br><br>";
+
+    echo diferenciaFechaAlta($libro) . "<br><br>";
 } // añadi esta funcion para no repetir el mismo echo con cada filtrado

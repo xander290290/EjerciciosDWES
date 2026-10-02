@@ -4,7 +4,8 @@ $titulos = [
     "Dune",
     "1984",
     "Fundación",
-    "El Hobbit"
+    "El Hobbit",
+    "Los siete enanitos"
 ];
 
 ?>

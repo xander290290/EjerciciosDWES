@@ -9,41 +9,50 @@ $disponible = $_GET['disponible'] ?? '';
 $libroMasLargo = obtenerLibroMasLargo($libros);
 
 echo "<h1>Catálogo en PHP</h1>";
+echo "<h2>Fecha de revision del catalogo</h2>";
+
+$hoy = new DateTimeImmutable();
+$fechaRevision = $hoy->modify("+30 days");
+
 echo "<h2>Libro más largo:</h2>";
 catalogo($libroMasLargo);
 
+$catalogoFiltrado = $libros;
 
-if ($genero !== '' && $disponible === '1') { 
-    $catalogoFiltrado = filtrarDisponibles($libros);
-    $catalogoFiltradoFinal = filtrarPorGenero($catalogoFiltrado, $genero);
-    echo "Catálogo filtrado por género: " . $genero . " y disponibilidad: " . ($disponible ? 'Disponible' : 'No disponible') . "<br><br>";
-    echo "Numero de libros: " . count($catalogoFiltradoFinal)."<br><br>";
-    echo "Media de páginas: " . calcularMediaPaginas($catalogoFiltradoFinal)."<br><br>";
-    foreach ($catalogoFiltradoFinal as $libro) {
-        catalogo($libro);
+if ($disponible === 'si') {
+    $catalogoFiltrado = filtrarDisponibles($catalogoFiltrado);
+}
+
+if ($genero !== '') {
+    $catalogoFiltrado = filtrarPorGenero($catalogoFiltrado, $genero);
+}
+
+if ($genero !== '' || $disponible === 'si') {
+    echo "Catálogo filtrado";
+
+    if ($genero !== '') {
+        echo " por género: " . $genero;
     }
-} elseif ($genero !== '') {
-    $catalogoFiltrado = filtrarPorGenero($libros, $genero);
-    echo "Catálogo filtrado por género: " . $genero . "<br><br>";
-    echo "Numero de libros: " . count($catalogoFiltrado)."<br><br>";
-    echo "Media de páginas: " . calcularMediaPaginas($catalogoFiltrado)."<br><br>";
+
+    if ($disponible === 'si') {
+        echo " y disponibilidad: Disponible";
+    }
+
+    echo "<br><br>";
+
+    echo "Número de libros: " . count($catalogoFiltrado) . "<br><br>";
+    echo "Media de páginas: " . calcularMediaPaginas($catalogoFiltrado) . "<br><br>";
+
     foreach ($catalogoFiltrado as $libro) {
         catalogo($libro);
-    }
-} elseif ($disponible === '1') {
-    $catalogoFiltrado = filtrarDisponibles($libros);
-    echo "Catálogo filtrado por disponibilidad: <br><br>";
-    echo "Numero de libros: " . count($catalogoFiltrado)."<br><br>";
-    echo "Media de páginas: " . calcularMediaPaginas($catalogoFiltrado)."<br><br>";
-    foreach ($catalogoFiltrado as $libro) {
-        catalogo($libro);
+        diferenciaFechaAlta($libro);
     }
 } else {
-    echo "Catálogo completo: <br><br>";
-    echo "Numero de libros: " . count($libros)."<br><br>";
-    echo "Media de páginas: " . calcularMediaPaginas($libros)."<br><br>";
+    echo "<h2>Catálogo completo:</h2>";
+    echo "Número de libros: " . count($libros) . "<br><br>";
+    echo "Media de páginas: " . calcularMediaPaginas($libros) . "<br><br>";
+
     foreach ($libros as $libro) {
         catalogo($libro);
     }
 }
-
