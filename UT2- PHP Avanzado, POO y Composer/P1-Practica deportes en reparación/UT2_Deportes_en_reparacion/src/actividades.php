@@ -19,25 +19,25 @@ function obtenerCategorias(array $actividades): array
     // TODO 2: extraer categorías sin duplicados en orden de aparición.
     $catValorColumna = array_column($actividades, 'categoria'); //Extrae los valores de la columna
     $catSinDuplicado = array_unique($catValorColumna); //Elimina los duplicados
-    $catConEntiqueta = array_map(fn (int $c): string => "Cat: $c", $catSinDuplicado); //Añade etiqueta a cada valor
-    return $catConEntiqueta;
+    $catLista = array_values($catSinDuplicado);
+    return $catLista;
 } //Hecho
 
 function categoriaValida(string $categoria, array $categorias): bool
 {
-    return $categoria === '' || (bool) array_search($categoria, $categorias, true);
-} //No se
+    return $categoria === '' || (bool) array_search($categoria, $categorias, true) !== false; //Se añade que no sea false porque 0 es una opcion valida de search
+} //Hecho
 
 function plazasOcupadas(array $reservas, int $actividadId): int
 {
     // TODO 5: sumar plazas de reservas confirmadas de esta actividad.
     $confirmado = array_filter(
         $reservas,
-        fn (int $r): bool => $r['estado'] === 'confirmada' && $r['id'] === $actividadId
-        ); //Filtra por estado confirmado y si id
-    $campoPlazas = array_reduce($confirmado, fn (int $a, int $b): int => $a[plazas] + $b[plazas], 0); //Suma las plazas del array confirmado
-    return 0;
-} //No se
+        fn (array $r): bool => $r['estado'] === 'confirmada' && $r['id'] === $actividadId
+        ); //Filtra por estado confirmado y su id
+    $campoPlazas = array_reduce($confirmado, fn ( int $a, array $b): int => $a + $b['plazas'], 0); //Suma las plazas del array confirmado
+    return $campoPlazas;
+} //Hecho
 
 // Función facilitada: añade los cálculos a una copia de cada actividad.
 function prepararActividades(array $actividades, array $reservas): array
@@ -51,7 +51,7 @@ function prepararActividades(array $actividades, array $reservas): array
         },
         $actividades
     );
-}
+} //Añade a cada actividad del array actividades el valor de ocupadas y libres gracias a la funcion anterior, preparando un nuevo array con estos valores
 
 function filtrarActividades(
     array $actividades,
@@ -70,30 +70,57 @@ function filtrarActividades(
         $actividadesConPlazas = array_filter($actividades, fn (): bool => $a);
     }
     return [];
-} //No se
+} //No se XFaltaX 
 
 function ordenarActividades(array $actividades, string $orden): array
 {
     // TODO 4: ordenar una copia según el criterio y desempatar por id.
-    usort($actividades, fn (array $a, array $b): int => $p);
+    usort($actividades, function (array $a, array $b) use ($orden): int {
+        if ($orden === 'libres') {
+            $comparacion = $a['capacidad'] <=> $b['capacidad'];
+        } elseif ($orden === 'nombre') {
+            $comparacion = $a['nombre'] <=> $b['nombre'];
+        }
+
+        if ($comparacion === 0) {
+            $comparacion = $a['id'] <=> $b['id'];
+        }
+        return $comparacion;
+});
     return $actividades;
-} //No se
+} //Hecho, lo de normalizar el nombre no se me aclara
 
 function resumirActividades(array $actividades): array
 {
     return [
         'cantidad' => count($actividades),
-        'capacidad' => count($actividades), // REVISAR: cuenta actividades, no plazas
+        'capacidad' => array_reduce(
+            $actividades,
+            fn(int $cont, array $c): int => $cont + $c['capacidad'],
+            0 //Hace una suma de contador y capacidad de cada actividad
+        ), // REVISAR: cuenta actividades, no plazas
         'ocupadas' => array_reduce(
             $actividades,
             fn(int $s, array $a): int => $s + $a['ocupadas'],
-            0
+            0 //Suma de contador y ocupadas de cada actividad
         ),
-        'libres' => 0, // TODO 6: sumar plazas libres
-        'hayCompletas' => array_any(), // TODO 7: comprobar si alguna está completa
-        'todasConPlazas' => false, // TODO 8: comprobar si todas tienen plazas
+        'libres' => array_reduce(
+            $actividades,
+            fn(int $cont, array $c): int => $cont + $c['libres'],
+            0 //Suma la cantidad de libres de cada actividad
+        ), // TODO 6: sumar plazas libres
+        'hayCompletas' => (array_any(
+            $actividades,
+            fn(array $c): bool => $c['libres'] === 0
+        )? 'Alguna esta completa' : 'Ninguna esta completa'), //Si el array_any da verdadero alguna esta completa y si no, ninguna lo esta, lo resuelvo por operador terniario
+        // TODO 7: comprobar si alguna está completa
+        'todasConPlazas' => (array_all(
+            $actividades,
+            fn(array $c): bool => $c['libres'] > 0
+        )? 'Todas tienen al menos 1' : 'Ninguna tiene plaza') //Si alguna actividad tiene al menos 1 libre el array_all da true, si ninguna tiene da false
+        // TODO 8: comprobar si todas tienen plazas
     ];
-} //No se
+} //Hecho
 
 // Función facilitada: permite pasar una función como dato.
 function transformarNombres(array $nombres, callable $callback): array
@@ -104,8 +131,15 @@ function transformarNombres(array $nombres, callable $callback): array
 function generarEtiquetas(array $actividades, string $prefijo = 'Actividad: '): array
 {
     // TODO 9: extraer nombres y usar una closure que capture el prefijo.
-    return [];
-}
+    $nombres = array_column($actividades, 'nombre');
+    $res = transformarNombres(
+        $nombres,
+        function (string $nombres) use ($prefijo) {
+            return $prefijo . limpiarEspacios($nombres);
+        }
+    );
+    return $res;
+} //Recoge valores de una columna y añade prefijos como array_map
 
 // Función facilitada. La entrada web valida el id antes de llamar.
 function normalizarId(int|string $id): int
@@ -116,16 +150,23 @@ function normalizarId(int|string $id): int
 function buscarPorId(array $actividades, int|string $id): ?array
 {
     // TODO 10: buscar por id en todas las actividades; id no es índice.
+    $idNormalizado = normalizarId($id); //Normaliza el id para que sea de tipo int
     return array_find(
-        $actividades
+        $actividades,
+        fn(array $a) => $a['id'] === $idNormalizado //Comprueba que el id coincida para devolver el primero que encuentre
     );
-} //Sin completar
+} //Hecho
 
 function monitorVisible(?string $monitor): string
 {
     // TODO 11: resolver el caso de monitor null.
-    return '';
-}
+    if ($monitor === null) {
+        return 'Monitor pendiente';
+    }else {
+        $nombre = $monitor;
+    }
+    return $nombre;
+} //Si hay nombre conservalo?
 
 function inicioNombre(string $nombre): string
 {
