@@ -25,7 +25,7 @@ function obtenerCategorias(array $actividades): array
 
 function categoriaValida(string $categoria, array $categorias): bool
 {
-    return $categoria === '' || (bool) array_search($categoria, $categorias, true) !== false; //Se añade que no sea false porque 0 es una opcion valida de search
+    return $categoria === '' || array_search($categoria, $categorias, true) !== false; //Se añade que no sea false porque 0 es una opcion valida de search
 } //Hecho
 
 function plazasOcupadas(array $reservas, int $actividadId): int
@@ -33,7 +33,7 @@ function plazasOcupadas(array $reservas, int $actividadId): int
     // TODO 5: sumar plazas de reservas confirmadas de esta actividad.
     $confirmado = array_filter(
         $reservas,
-        fn (array $r): bool => $r['estado'] === 'confirmada' && $r['id'] === $actividadId
+        fn (array $r): bool => $r['estado'] === 'confirmada' && $r['actividadId'] === $actividadId
         ); //Filtra por estado confirmado y su id
     $campoPlazas = array_reduce($confirmado, fn ( int $a, array $b): int => $a + $b['plazas'], 0); //Suma las plazas del array confirmado
     return $campoPlazas;
@@ -60,17 +60,20 @@ function filtrarActividades(
     bool $soloConPlazas
 ): array
 
-{
-    // TODO 3: filtrar por nombre, categoría y plazas libres.
-    if ($texto === '' && $categoria === '') {
-        return $actividades;
+{   // TODO 3: filtrar por nombre, categoría y plazas libres.
+    if ($texto !== '') {
+        $actividades = array_filter($actividades, fn (array $a): bool => str_contains(normalizarBusqueda($a['nombre']), normalizarBusqueda($texto)));
     }
 
-    if ($soloConPlazas){
-        $actividadesConPlazas = array_filter($actividades, fn (): bool => $a);
+    if ($categoria !== '') {
+        $actividades = array_filter($actividades, fn (array $a): bool => normalizarBusqueda($a['categoria']) === normalizarBusqueda($categoria));
     }
-    return [];
-} //No se XFaltaX 
+    
+    if ($soloConPlazas){
+        $actividades = array_filter($actividades, fn (array $a): bool => $a['libres']>0);
+    }
+    return $actividades;
+} //Hecho. El profesor lo resolvio añadiendo todas las condiciones dentro de la funcion de un array_filter
 
 function ordenarActividades(array $actividades, string $orden): array
 {
@@ -88,7 +91,7 @@ function ordenarActividades(array $actividades, string $orden): array
         return $comparacion;
 });
     return $actividades;
-} //Hecho, lo de normalizar el nombre no se me aclara
+} //Hecho, los nombres ya estan normalizados
 
 function resumirActividades(array $actividades): array
 {
@@ -96,29 +99,27 @@ function resumirActividades(array $actividades): array
         'cantidad' => count($actividades),
         'capacidad' => array_reduce(
             $actividades,
-            fn(int $cont, array $c): int => $cont + $c['capacidad'],
-            0 //Hace una suma de contador y capacidad de cada actividad
-        ), // REVISAR: cuenta actividades, no plazas
+            fn(int $c, array $a): int => $c + $a['capacidad'],
+            0
+        ),
         'ocupadas' => array_reduce(
             $actividades,
             fn(int $s, array $a): int => $s + $a['ocupadas'],
-            0 //Suma de contador y ocupadas de cada actividad
+            0
         ),
         'libres' => array_reduce(
             $actividades,
-            fn(int $cont, array $c): int => $cont + $c['libres'],
-            0 //Suma la cantidad de libres de cada actividad
-        ), // TODO 6: sumar plazas libres
-        'hayCompletas' => (array_any(
+            fn(int $s, array $a): int => $s + $a['libres'],
+            0
+        ),
+        'hayCompletas' => array_any(
             $actividades,
-            fn(array $c): bool => $c['libres'] === 0
-        )? 'Alguna esta completa' : 'Ninguna esta completa'), //Si el array_any da verdadero alguna esta completa y si no, ninguna lo esta, lo resuelvo por operador terniario
-        // TODO 7: comprobar si alguna está completa
-        'todasConPlazas' => (array_all(
+            fn(array $a): bool => $a['libres'] === 0,
+        ), // TODO 7: comprobar si alguna está completa
+        'todasConPlazas' => array_all(
             $actividades,
-            fn(array $c): bool => $c['libres'] > 0
-        )? 'Todas tienen al menos 1' : 'Ninguna tiene plaza') //Si alguna actividad tiene al menos 1 libre el array_all da true, si ninguna tiene da false
-        // TODO 8: comprobar si todas tienen plazas
+            fn(array $a): bool => $a['libres'] > 0,
+        ), // TODO 8: comprobar si todas tienen plazas
     ];
 } //Hecho
 
@@ -160,20 +161,15 @@ function buscarPorId(array $actividades, int|string $id): ?array
 function monitorVisible(?string $monitor): string
 {
     // TODO 11: resolver el caso de monitor null.
-    if ($monitor === null) {
-        return 'Monitor pendiente';
-    }else {
-        $nombre = $monitor;
-    }
-    return $nombre;
-} //Si hay nombre conservalo?
+    return ($monitor ?? 'Monitor pendiente'); ///Comprueba que monitor no sea null, y si lo es devuelve monitor pendiente
+} ///Hecho
 
 function inicioNombre(string $nombre): string
 {
-    return substr(limpiarEspacios($nombre), 0, 3);
+    return mb_substr(limpiarEspacios($nombre), 0, 3, 'UTF-8'); //Se usa mb_substr para contar caracteres especiales
 }
 
 function codigoValido(string $codigo): bool
 {
-    return preg_match('/DEP-[0-9]+-[0-9]+/', $codigo) === 1;
+    return preg_match('/^DEP-\d{4}-\d{4}$/', $codigo) === 1;
 }
