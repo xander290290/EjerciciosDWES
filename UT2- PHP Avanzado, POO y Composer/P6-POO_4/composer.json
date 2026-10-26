@@ -1,19 +1,17 @@
 {
     "name": "ies-ramon-arcas/gestion-envios",
-    "description": "Proyecto de Gestión de Envíos - UT2 DAW",
+    "description": "Proyecto de gestión de envíos - UT2 DAW",
     "type": "project",
     "autoload": {
         "psr-4": {
             "App\\": "src/"
         }
     },
-    "authors": [
-        {
-            "name": "Juan Tamboleo López-Brea"
-        }
-    ],
-    "require": {},
+    "require": {
+        "php": ">=8.1",
+        "ext-mbstring": "*"
+    },
     "scripts": {
-        "envios": "php envios.php"
+        "envios": "@php envios.php"
     }
 }

@@ -61,9 +61,9 @@ abstract class Actividad implements Reservable{
     public final function reservar(int $cantidad): void {
         if ($cantidad<1){
             throw new InvalidArgumentException('Cantidad no permitida');
-        } elseif ($this->estado === EstadoActividad::Cerrado) {
+        } elseif ($this->estado === EstadoActividad::Cerrada) {
             throw new ReservaException('Estado de actividad cerrado');
-        } elseif ($cantidad > PlazasLibres()) {
+        } elseif ($cantidad > $this->PlazasLibres()) {
             throw new PlazasInsuficientesException('Plazas insuficientes');
         }
         $this->ocupadas = $this->ocupadas + $cantidad;
