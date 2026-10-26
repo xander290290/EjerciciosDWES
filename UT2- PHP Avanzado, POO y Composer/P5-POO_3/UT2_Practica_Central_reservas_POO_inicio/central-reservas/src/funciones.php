@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 function entrada(array $origen, string $clave, string $defecto = ''): string
@@ -10,7 +11,8 @@ function entrada(array $origen, string $clave, string $defecto = ''): string
 function enteroPositivo(string $valor): int
 {
     // TODO F2. Valida antes de convertir; rechaza con InvalidArgumentException.
-    $entero = filter_var($valor, FILTER_VALIDATE_INT);
+    // Para que no acepte ni 0 ni negativos
+    $entero = filter_var($valor, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
     if ($entero === false) {
         throw new InvalidArgumentException('Debe indicarse un número entero positivo.');
     }
@@ -30,8 +32,10 @@ function normalizar(string $texto): string
 function buscarPorId(array $actividades, int $id): ?Actividad
 {
     // TODO F3. Usa array_find con un callback tipado.
-    return array_find($actividades, 
-            fn (Actividad $a): bool => $a->id() === $id);
+    return array_find(
+        $actividades,
+        fn(Actividad $a): bool => $a->id() === $id
+    );
 }
 
 function filtrarActividades(
@@ -45,8 +49,7 @@ function filtrarActividades(
 
     $resultado = array_filter(
         $actividades,
-        fn(Actividad $a): bool =>
-            ($buscado === '' || str_contains(normalizar($a->nombre()), $buscado))
+        fn(Actividad $a): bool => ($buscado === '' || str_contains(normalizar($a->nombre()), $buscado))
             && ($tipo === '' || $a->tipo() === $tipo)
             && ($estado === null || $a->estado() === $estado)
             && (!$soloDisponibles
@@ -83,6 +86,7 @@ function transformarActividades(array $actividades, callable $transformacion): a
     return array_map($transformacion, $actividades);
 }
 
+// Por qué le has cambiado el nombre?
 function etiquetasActividades(array $actividades, string $prefijo = 'Actividad: '): array
 {
     return transformarActividades(
