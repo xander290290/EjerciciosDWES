@@ -1,0 +1,8 @@
+GET /libros.php?q=Dune
+
+$_GET tiene como clave 'q' y como valor 'Dune'
+$_SERVER["REQUEST_METHOD"] tiene como valor GET
+
+----------------------------
+POST /libro-editar.php?id=3
+
