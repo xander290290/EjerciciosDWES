@@ -1,0 +1,1 @@
+{"version":2,"defects":{"LibroTest::testCompruebaDisponible":7,"LibroTest::testExceptionNoDisponible":8},"times":{"LibroTest::testConservaTitulo":0,"LibroTest::testCompruebaDisponible":0,"LibroTest::testExceptionNoDisponible":0,"LibroTest::testExceptionInvalidArgument":0,"LibroTest::testExceptionInvalidArgumentTitulo":0,"LibroTest::testExceptionInvalidArgumentAutor":0}}
