@@ -33,7 +33,6 @@ final class AltaControlador
                     $datos = $resultado['datos'];
                     try {
                         // COMPLETAR 5. Construir $nuevo con los cinco datos validados.
-                        // COMPLETAR 5. Construir $nuevo con los cinco datos validados.
                         $nuevo = new Material(
                             $datos['nombre'],
                             $datos['fabricante'],

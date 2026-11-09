@@ -16,7 +16,6 @@ final class CatalogoControlador
         $errores = [];
         $materiales = [];
         // COMPLETAR 2. Validar $_GET y consultar solo si no hay errores.
-        // COMPLETAR 2. Validar $_GET y consultar solo si no hay errores.
         $resultado = validarFiltros($_GET);
         $filtros = $resultado['valores'];
         $errores = $resultado['errores'];

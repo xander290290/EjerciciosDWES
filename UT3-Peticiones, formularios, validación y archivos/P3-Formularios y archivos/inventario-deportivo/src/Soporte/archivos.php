@@ -59,7 +59,6 @@ function inspeccionarImagen(array $archivos): array
     if ($r['error'] !== null || $r['archivo'] === null) { return $r; }
     $a = $r['archivo'];
     // COMPLETAR 6. Tamaño, temporal legible y MIME. No mover aquí el archivo.
-    // COMPLETAR 6. Tamaño, temporal legible y MIME. No mover aquí el archivo.
     if ($a['size'] < 1 || $a['size'] > 2_097_152) {
         return ['archivo' => null, 'error' => 'La imagen debe ocupar entre 1 byte y 2 MiB.'];
     }
