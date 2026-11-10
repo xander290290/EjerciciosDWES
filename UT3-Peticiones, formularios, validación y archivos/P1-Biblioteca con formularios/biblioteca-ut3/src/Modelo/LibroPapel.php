@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xander\Biblioteca\Modelo;
+namespace XanderAyala\Biblioteca\Modelo;
 
 final class LibroPapel extends Libro
 {

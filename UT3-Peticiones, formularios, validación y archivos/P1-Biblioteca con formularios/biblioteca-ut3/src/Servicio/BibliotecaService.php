@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Xander\Biblioteca\Servicio;
+namespace XanderAyala\Biblioteca\Servicio;
 
 use InvalidArgumentException;
-use Xander\Biblioteca\Modelo\Libro;
+use XanderAyala\Biblioteca\Modelo\Libro;
 
 final class BibliotecaService
 {
