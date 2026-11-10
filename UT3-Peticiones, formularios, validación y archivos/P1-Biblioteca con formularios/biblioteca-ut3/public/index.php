@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Xander\Biblioteca\Servicio\BibliotecaService;
+use XanderAyala\Biblioteca\Servicio\BibliotecaService;
 
 $libros = require dirname(__DIR__) . '/datos/libros.php';
 $servicio = new BibliotecaService($libros);

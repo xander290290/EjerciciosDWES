@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Xander\Biblioteca\Modelo\LibroDigital;
-use Xander\Biblioteca\Modelo\LibroPapel;
+use XanderAyala\Biblioteca\Modelo\LibroDigital;
+use XanderAyala\Biblioteca\Modelo\LibroPapel;
 
 return [
     new LibroPapel('Dune', 'Frank Herbert', 412, 'ciencia', 2, null, true, ''),
