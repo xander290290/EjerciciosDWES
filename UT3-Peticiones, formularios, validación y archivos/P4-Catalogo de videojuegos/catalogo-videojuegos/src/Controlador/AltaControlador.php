@@ -77,30 +77,8 @@ final class AltaControlador
                         if ($errores === []) {
                             $catalogo->agregar($nuevo);
                             $creado = $nuevo;
-                        }$nuevo = new Videojuego(
-                            $datos['titulo'],
-                            $datos['estudio'],
-                            $datos['horas'],
-                            $datos['genero'],
-                            $datos['fechaLanzamiento']
-                        );
-
-                        if ($subida['archivo'] !== null) {
-                            $archivo = $subida['archivo'];
-                            $destino = prepararDestino($archivo['extension']);
-
-                            if (!move_uploaded_file($archivo['tmp_name'], $destino['ruta'])) {
-                                $errores['caratula'] = 'No se ha podido guardar la carátula.';
-                            } else {
-                                $nuevo->cambiarCaratula($destino['nombre']);
-                            }
                         }
-
-                        if ($errores === []) {
-                            $catalogo->agregar($nuevo);
-                            $creado = $nuevo;
-                        }
-
+                        
                     } catch (InvalidArgumentException) {
                         $errores['general'] = 'No se ha podido crear el videojuego con esos datos.';
                     } catch (RuntimeException $error) {

@@ -18,5 +18,4 @@ final class CatalogoTest extends TestCase
         self::assertSame(35, $videojuego->horas());
         self::assertNull($videojuego->fechaLanzamiento());
     }
-
 }
