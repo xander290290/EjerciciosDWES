@@ -26,12 +26,21 @@ final class AltaControlador
         $errores = [];
         $creado = null;
 
+        $valores = [
+            'titulo' => '',
+            'estudio' => '',
+            'horas' => '',
+            'genero' => '',
+            'fechaLanzamiento' => '',
+        ];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (postExcesivo()) {
                 $errores['general'] = 'El envío completo supera el límite de PHP.';
             } else {
                 // Proporcionado. Valida campos y caratula antes de crear o mover.
                 $resultado = validarVideojuego($_POST);
+                $valores = $resultado['valores'];
                 $errores = $resultado['errores'];
                 $subida = inspeccionarCaratula($_FILES);
 
@@ -47,6 +56,28 @@ final class AltaControlador
                         // COMPLETAR 5. Guardar y asociar la carátula si hay archivo.
                         // Al terminar sin errores, agregar $nuevo y asignarlo a $creado.
                         $nuevo = new Videojuego(
+                            $datos['titulo'],
+                            $datos['estudio'],
+                            $datos['horas'],
+                            $datos['genero'],
+                            $datos['fechaLanzamiento']
+                        );
+
+                        if ($subida['archivo'] !== null) {
+                            $archivo = $subida['archivo'];
+                            $destino = prepararDestino($archivo['extension']);
+
+                            if (!move_uploaded_file($archivo['tmp_name'], $destino['ruta'])) {
+                                $errores['caratula'] = 'No se ha podido guardar la carátula.';
+                            } else {
+                                $nuevo->cambiarCaratula($destino['nombre']);
+                            }
+                        }
+
+                        if ($errores === []) {
+                            $catalogo->agregar($nuevo);
+                            $creado = $nuevo;
+                        }$nuevo = new Videojuego(
                             $datos['titulo'],
                             $datos['estudio'],
                             $datos['horas'],

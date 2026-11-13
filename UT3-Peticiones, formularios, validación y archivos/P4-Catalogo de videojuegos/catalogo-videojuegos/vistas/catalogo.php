@@ -23,7 +23,6 @@ use function App\Soporte\e;
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-
     <!-- COMPLETAR 1. Formulario GET con controles HTML estáticos. -->
     <form action="index.php" method="get">
         <div>
@@ -80,6 +79,6 @@ use function App\Soporte\e;
     <?php endif; ?>
 
     <p><a href="index.php">Limpiar filtros</a></p>
-</body>
+</body> 
 
 </html>

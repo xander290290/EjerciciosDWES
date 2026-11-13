@@ -41,7 +41,7 @@ final class CaratulaControlador
         header('Content-Type: ' . $mime);
         header('X-Content-Type-Options: nosniff');
         readfile($ruta);
-
+        
         exit;
     }
 }

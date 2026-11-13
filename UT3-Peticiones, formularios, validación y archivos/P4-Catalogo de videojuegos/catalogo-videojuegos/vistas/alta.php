@@ -28,28 +28,28 @@ use function App\Soporte\e;
         <form action="alta.php" method="post" enctype="multipart/form-data">
             <div>
                 <label for="titulo">Título</label>
-                <input type="text" id="titulo" name="titulo">
+                <input type="text" id="titulo" name="titulo" value="<?= e($valores['titulo'] ?? '') ?>">
             </div>
             <div>
                 <label for="estudio">Estudio</label>
-                <input type="text" id="estudio" name="estudio">
+                <input type="text" id="estudio" name="estudio" value="<?= e($valores['estudio'] ?? '') ?>">
             </div>
             <div>
                 <label for="horas">Horas de juego</label>
-                <input type="text" id="horas" name="horas">
+                <input type="text" id="horas" name="horas" value="<?= e($valores['horas'] ?? '') ?>">
             </div>
             <div>
                 <label for="genero">Género</label>
                 <select id="genero" name="genero">
-                    <option value="">Elige un género</option>
-                    <option value="aventura">Aventura</option>
-                    <option value="estrategia">Estrategia</option>
-                    <option value="rol">Rol</option>
+                    <option value="" <?= ($valores['genero'] ?? '') === '' ? 'selected' : '' ?>>Elige un género</option>
+                    <option value="aventura" <?= ($valores['genero'] ?? '') === 'aventura' ? 'selected' : '' ?>>Aventura</option>
+                    <option value="estrategia" <?= ($valores['genero'] ?? '') === 'estrategia' ? 'selected' : '' ?>>Estrategia</option>
+                    <option value="rol" <?= ($valores['genero'] ?? '') === 'rol' ? 'selected' : '' ?>>Rol</option>
                 </select>
             </div>
             <div>
                 <label for="fechaLanzamiento">Fecha de lanzamiento (YYYY-MM-DD)</label>
-                <input type="text" id="fechaLanzamiento" name="fechaLanzamiento">
+                <input type="text" id="fechaLanzamiento" name="fechaLanzamiento" value="<?= e($valores['fechaLanzamiento'] ?? '') ?>">
             </div>
             <div>
                 <label for="caratula">Carátula</label>

@@ -35,6 +35,5 @@ final class ConsultaVideojuegoTest extends TestCase
         $consulta = new ConsultaVideojuego($repositorio);
 
         self::assertSame($videojuego, $consulta->obtener(7));
-    }
-
+    } 
 }

@@ -123,7 +123,6 @@ function prepararDestino(string $extension): array
     } catch (Throwable $error) {
         throw new RuntimeException('No se ha podido preparar el nombre de la carátula.', 0, $error);
     }
-
     $ruta = $directorio . '/' . $nombre;
 
     if (file_exists($ruta) || is_link($ruta)) {
