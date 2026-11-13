@@ -38,8 +38,9 @@ final class CartelControlador
             exit;
         }
         // COMPLETAR 7. Cabeceras y envío del archivo validado.
-        header(Content-type[$mime]);
-        header(X-Content-type[$nosniff]);
+        header('Content-type: ' . $mime);
+        header('X-Content-type-Options: nosniff');
+        readfile($ruta);
 
         exit;
     }

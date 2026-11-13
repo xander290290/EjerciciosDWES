@@ -85,7 +85,7 @@ function inspeccionarCartel(array $archivos): array
     $a = $r['archivo'];
 
     // COMPLETAR 4. Tamaño, temporal legible y MIME. No mover aquí el archivo.
-    if ($a['size'] < 1 || $a['size'] > 2_097_152){
+    if ($a['size'] < 1 || $a['size'] > 2 * 1024 * 1024) {
         return ['archivo' => null, 'error' => 'Tamaño no aceptado'];
     }
     if (!is_file($a['tmp_name']) || !is_readable($a['tmp_name'])) {
@@ -93,12 +93,12 @@ function inspeccionarCartel(array $archivos): array
     }
     $detector = new finfo(FILEINFO_MIME_TYPE);
     $mime = $detector->file($a['tmp_name']);
-    if ($mime !== false){
-        $a['extension'] = MIME_CARTELES[$mime];
-        return ['archivo' => $a, 'error' => null];
-    } else {
+    if ($mime === false || !isset(MIME_CARTELES[$mime])) {
         return ['archivo' => null, 'error' => 'Cartel no acpetado'];
     }
+
+    $a['extension'] = MIME_CARTELES[$mime];
+    return ['archivo' => $a, 'error' => null];
 }
 
 // Proporcionado. Recibe una extensión ya obtenida de MIME_CARTELES.
@@ -116,7 +116,7 @@ function prepararDestino(string $extension): array
 
     try {
         // COMPLETAR 6. Nombre aleatorio y extensión validada.
-        $nombre = bin2hex((random_bytes(16))).'.'.$a['extension'];
+        $nombre = bin2hex((random_bytes(16))) . '.' . $extension;
     } catch (Throwable $error) {
         throw new RuntimeException('No se ha podido preparar el nombre del cartel.', 0, $error);
     }

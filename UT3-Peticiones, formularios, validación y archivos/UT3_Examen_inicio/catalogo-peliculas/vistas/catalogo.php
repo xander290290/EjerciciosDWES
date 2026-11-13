@@ -30,9 +30,10 @@ use function App\Soporte\e;
         <?php endif; ?>
 
         <!-- COMPLETAR 1. Formulario GET con controles HTML estáticos. -->
-         <form action="index.php" method="get">
+        <form action="index.php" method="get">
             <label for="q">Título o director</label>
             <input type="text" name="q" id="q">
+            <label for="genero">Género</label>
             <select name="genero" id="genero">
                 <option value="">Todos</option>
                 <option value="ciencia">Ciencia ficción</option>
@@ -40,7 +41,7 @@ use function App\Soporte\e;
                 <option value="terror">Terror</option>
             </select>
             <button type="submit">Buscar</button>
-         </form>
+        </form>
 
         <?php if ($errores === []): ?>
             <!-- Listado proporcionado. -->

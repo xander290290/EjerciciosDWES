@@ -37,6 +37,7 @@ use function App\Soporte\e;
                 <input type="text" name="director" id="director">
                 <label for="duracion">Duración</label>
                 <input type="text" name="duracion" id="duracion">
+                <label for="genero">Género</label>
                 <select name="genero" id="genero">
                     <option value="">Elige un género</option>
                     <option value="ciencia">Ciencia</option>
@@ -75,7 +76,7 @@ use function App\Soporte\e;
 
                 <?php if ($creado->cartel() !== null): ?>
                     <img src="cartel.php?nombre=<?= e($creado->cartel()) ?>"
-                         alt="Cartel de la película creada" width="180">
+                        alt="Cartel de la película creada" width="180">
                 <?php else: ?>
                     <p>Sin cartel</p>
                 <?php endif; ?>

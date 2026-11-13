@@ -8,12 +8,13 @@ use PHPUnit\Framework\TestCase;
 final class CatalogoTest extends TestCase
 {
     // COMPLETAR 8. Creación válida y estado del objeto.
-    private function creacionValida () {
+    public function testCreacionValida()
+    {
         $peli = new Pelicula(' Dune ', ' Denis Villeneuve ', 155, 'ciencia');
 
-        self::assert($peli->titulo(), 'Dune');
-        self::asert($peli->autor(), 'Denis Villeneuve');
-        self::same($peli->duracion(), 155);
-        self::same($peli->fechaEstreno, null);
+        $this->assertSame('Dune', $peli->titulo());
+        $this->assertSame('Denis Villeneuve', $peli->director());
+        $this->assertSame(155, $peli->duracion());
+        $this->assertNull($peli->fechaEstreno());
     }
 }

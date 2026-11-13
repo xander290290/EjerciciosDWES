@@ -16,9 +16,7 @@ use function App\Soporte\prepararDestino;
 
 final class AltaControlador
 {
-    public function __construct(private Catalogo $catalogo)
-    {
-    }
+    public function __construct(private Catalogo $catalogo) {}
 
     public function mostrar(): void
     {
@@ -55,21 +53,20 @@ final class AltaControlador
                             $datos['fechaEstreno']
                         );
 
-                        if ($subida['archivo'] !== null){
+                        if ($subida['archivo'] !== null) {
                             $archivo = $subida['archivo'];
                             $destino = prepararDestino($archivo['extension']);
                             if (move_uploaded_file($archivo['tmp_name'], $destino['ruta'])) {
                                 $nuevo->cambiarCartel($destino['nombre']);
                             } else {
-                                $errores[cartel] = 'No es posible cambiar el cartel';
+                                $errores['cartel'] = 'No es posible cambiar el cartel';
                             }
                         }
 
-                        if ($errores === []){
+                        if ($errores === []) {
                             $catalogo->agregar($nuevo);
                             $creado = $nuevo;
                         }
-
                     } catch (InvalidArgumentException) {
                         $errores['general'] = 'No se ha podido crear la película con esos datos.';
                     } catch (RuntimeException $error) {

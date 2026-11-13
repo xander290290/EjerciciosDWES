@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'docencia/examen-ut3-catalogo-peliculas',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'aae96238ed64f9e1dbea2aae2a6088149a4d6a02',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'docencia/examen-ut3-catalogo-peliculas' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'aae96238ed64f9e1dbea2aae2a6088149a4d6a02',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
